@@ -6,6 +6,18 @@ Questo progetto utilizza Google Sheets come database per un'applicazione Next.js
 Puoi accedere al foglio Google Sheets da questo link:
 [Menu Online](https://docs.google.com/spreadsheets/d/1654GQ2pWwr7Nt5MspQwRhD5_9TeNhkib9BgVAi-K4ds/edit?usp=sharing)
 
+### 📌 Ottenere l'ID del Google Sheet
+L'ID del tuo Google Sheet è un codice univoco che si trova nell'URL del foglio.  
+Ad esempio, in un URL come:
+```
+https://docs.google.com/spreadsheets/d/1a2B3cD4eF5gHiJ6KlMnOPqrsTUV7w8X9/edit#gid=0
+```
+l'ID del foglio è la parte compresa tra `/d/` e `/edit`, in questo caso:
+```
+1a2B3cD4eF5gHiJ6KlMnOPqrsTUV7w8X9
+```
+Questo valore va impostato nella variabile d'ambiente `GOOGLE_SHEET_ID`.
+
 ## 1️⃣ Abilitare l'API di Google Sheets
 Per permettere a Next.js di leggere il foglio, dobbiamo abilitare l'API di Google Sheets.
 
