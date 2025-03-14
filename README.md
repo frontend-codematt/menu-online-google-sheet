@@ -1,36 +1,60 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Integrazione di Google Sheets nel Progetto
 
-## Getting Started
+Questo progetto dimostra come integrare Google Sheets in un'applicazione, utilizzando le API di Google per leggere e scrivere dati. L'obiettivo è quello di creare un sistema in cui i dati (ad es. un menu) vengono gestiti direttamente da un Google Sheet.
 
-First, run the development server:
+## Passaggi per Collegare il Google Sheet al Progetto
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### 1. Creare un Progetto su Google Cloud Console
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+1. Visita la [Google Cloud Console](https://console.cloud.google.com/).
+2. Clicca su **Seleziona progetto** e poi su **Nuovo progetto**.
+3. Assegna un nome al progetto (es. "Menu Online App") e clicca su **Crea**.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+### 2. Abilitare le API Necessarie
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. Nel menu di navigazione, vai su **API e servizi** > **Libreria**.
+2. Cerca e seleziona **Google Sheets API** e clicca su **Abilita**.
+3. Se necessario, ripeti la procedura per **Google Drive API** (utile se devi gestire anche i file).
 
-## Learn More
+### 3. Creare le Credenziali per l'API
 
-To learn more about Next.js, take a look at the following resources:
+1. Vai su **API e servizi** > **Credenziali**.
+2. Clicca su **Crea credenziali** e seleziona **Account di servizio**.
+3. Durante la configurazione dell'account di servizio:
+   - Assegna un nome all'account (es. "menu-service-account").
+   - **Indica a quali dati accedere**: quando richiesto, seleziona l'opzione **Dati applicazione**. Questa scelta permette all'account di accedere esclusivamente ai dati dell'applicazione (es. i dati del Google Sheet), senza interagire con dati personali degli utenti.
+   - Seleziona un ruolo adeguato, come **Editor** (se devi modificare i dati) o **Lettore** (se solo leggere).
+4. Completa la creazione dell'account di servizio.
+5. Una volta creato, vai nella scheda **Chiavi** dell'account di servizio.
+6. Clicca su **Aggiungi chiave** > **Crea nuova chiave**.
+7. Seleziona il formato **JSON** e scarica il file contenente le credenziali.
+8. Copia l'email dell'account di servizio (sarà necessaria per concedere l'accesso al Google Sheet).
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 4. Configurare l'Accesso al Google Sheet
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. Apri il tuo Google Sheet.
+2. Clicca su **Condividi** in alto a destra.
+3. Incolla l'email dell'account di servizio (ottenuta nel passaggio precedente) nei permessi di condivisione.
+4. Concedi il permesso di **Lettore** (o **Editor**, se necessario) al foglio.
+5. Assicurati che il foglio contenga i dati strutturati correttamente (es. con intestazioni nelle prime righe).
 
-## Deploy on Vercel
+## Spiegazione del Progetto
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Il progetto utilizza le API di Google per interagire con un Google Sheet:
+- **Lettura e scrittura dei dati:** I dati (ad es. un menu con piatti, descrizione, prezzo, ecc.) vengono recuperati direttamente dal Google Sheet.
+- **Automazione e integrazione:** Le credenziali (credenziali di un account di servizio) vengono utilizzate per autenticarsi e accedere ai dati in maniera sicura, senza esporre informazioni sensibili al frontend.
+- **Cache e ottimizzazione:** Per ridurre il numero di richieste e migliorare le performance, il progetto può utilizzare tecniche di caching (ad es. tramite `unstable_cache` in Next.js).
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Requisiti
+
+- Un account Google.
+- Accesso alla [Google Cloud Console](https://console.cloud.google.com/).
+- Un Google Sheet esistente con i dati da utilizzare.
+- Le credenziali (file JSON) generate per l'account di servizio.
+
+## Note
+
+- **Sicurezza:** Conserva il file JSON delle credenziali in un luogo sicuro e non includerlo nel controllo versione (usa un file `.env.local` per gestire le variabili d'ambiente).
+- **Accesso:** Limita l'accesso al Google Sheet solo agli account e ai servizi necessari.
+- **Documentazione:** Consulta la [documentazione ufficiale di Google Sheets API](https://developers.google.com/sheets/api) per ulteriori dettagli e configurazioni avanzate.
+
