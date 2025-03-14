@@ -1,60 +1,74 @@
-# Integrazione di Google Sheets nel Progetto
+# 📌 Configurazione di Google Sheets con Next.js
 
-Questo progetto dimostra come integrare Google Sheets in un'applicazione, utilizzando le API di Google per leggere e scrivere dati. L'obiettivo è quello di creare un sistema in cui i dati (ad es. un menu) vengono gestiti direttamente da un Google Sheet.
+Questo progetto utilizza Google Sheets come database per un'applicazione Next.js.
 
-## Passaggi per Collegare il Google Sheet al Progetto
+## 🔗 Google Sheet
+Puoi accedere al foglio Google Sheets da questo link:
+[Menu Online](https://docs.google.com/spreadsheets/d/1654GQ2pWwr7Nt5MspQwRhD5_9TeNhkib9BgVAi-K4ds/edit?usp=sharing)
 
-### 1. Creare un Progetto su Google Cloud Console
+## 1️⃣ Abilitare l'API di Google Sheets
+Per permettere a Next.js di leggere il foglio, dobbiamo abilitare l'API di Google Sheets.
 
-1. Visita la [Google Cloud Console](https://console.cloud.google.com/).
-2. Clicca su **Seleziona progetto** e poi su **Nuovo progetto**.
-3. Assegna un nome al progetto (es. "Menu Online App") e clicca su **Crea**.
+### 📌 Passaggi:
+1. Vai su [Google Cloud Console](https://console.cloud.google.com/).
+2. Crea un nuovo progetto:
+   - Clicca su **Seleziona progetto** → **Nuovo progetto**.
+   - Assegna un nome (es. "Menu Online App").
+   - Clicca **Crea**.
+3. Vai su **API & Servizi** → **Abilita API e servizi**.
+4. Cerca **Google Sheets API** e abilitala.
+5. Cerca anche **Google Drive API** e abilitala.
 
-### 2. Abilitare le API Necessarie
+## 2️⃣ Creare una Service Account per accedere al Google Sheet
+Ora dobbiamo creare una Service Account, che fungerà da chiave per accedere al foglio Google.
 
-1. Nel menu di navigazione, vai su **API e servizi** > **Libreria**.
-2. Cerca e seleziona **Google Sheets API** e clicca su **Abilita**.
-3. Se necessario, ripeti la procedura per **Google Drive API** (utile se devi gestire anche i file).
+### 📌 Passaggi:
+1. Vai su **API & Servizi** → **Credenziali**.
+2. Clicca su **Crea credenziali** → **Account di servizio**.
+3. Dai un nome all’account (es. `menu-service-account`).
+4. Assegna il ruolo **Editor** → **Editor di Documenti**.
+5. Clicca **Continua** e poi **Fine**.
+6. Ora, nella lista degli account di servizio, seleziona quello appena creato.
+7. Vai nella scheda **Chiavi** → **Aggiungi chiave** → **Crea nuova chiave**.
+8. Scegli **JSON** e scarica il file. Questo file contiene le credenziali.
 
-### 3. Creare le Credenziali per l'API
+## 3️⃣ Condividere il Google Sheet con la Service Account
+Ora dobbiamo condividere il foglio con la Service Account, perché di default non ha accesso.
 
-1. Vai su **API e servizi** > **Credenziali**.
-2. Clicca su **Crea credenziali** e seleziona **Account di servizio**.
-3. Durante la configurazione dell'account di servizio:
-   - Assegna un nome all'account (es. "menu-service-account").
-   - **Indica a quali dati accedere**: quando richiesto, seleziona l'opzione **Dati applicazione**. Questa scelta permette all'account di accedere esclusivamente ai dati dell'applicazione (es. i dati del Google Sheet), senza interagire con dati personali degli utenti.
-   - Seleziona un ruolo adeguato, come **Editor** (se devi modificare i dati) o **Lettore** (se solo leggere).
-4. Completa la creazione dell'account di servizio.
-5. Una volta creato, vai nella scheda **Chiavi** dell'account di servizio.
-6. Clicca su **Aggiungi chiave** > **Crea nuova chiave**.
-7. Seleziona il formato **JSON** e scarica il file contenente le credenziali.
-8. Copia l'email dell'account di servizio (sarà necessaria per concedere l'accesso al Google Sheet).
-
-### 4. Configurare l'Accesso al Google Sheet
-
-1. Apri il tuo Google Sheet.
+### 📌 Passaggi:
+1. Apri il tuo **Google Sheet**.
 2. Clicca su **Condividi** in alto a destra.
-3. Incolla l'email dell'account di servizio (ottenuta nel passaggio precedente) nei permessi di condivisione.
-4. Concedi il permesso di **Lettore** (o **Editor**, se necessario) al foglio.
-5. Assicurati che il foglio contenga i dati strutturati correttamente (es. con intestazioni nelle prime righe).
+3. Copia l'email della Service Account dal file JSON (sarà simile a `menu-service@your-project.iam.gserviceaccount.com`).
+4. Incollala nel campo di condivisione e assegna il ruolo **Editor**.
+5. Clicca **Invia**.
 
-## Spiegazione del Progetto
+## 4️⃣ Configurare le credenziali nel progetto Next.js
+Ora che abbiamo ottenuto tutto, dobbiamo salvare le credenziali nel nostro progetto Next.js.
 
-Il progetto utilizza le API di Google per interagire con un Google Sheet:
-- **Lettura e scrittura dei dati:** I dati (ad es. un menu con piatti, descrizione, prezzo, ecc.) vengono recuperati direttamente dal Google Sheet.
-- **Automazione e integrazione:** Le credenziali (credenziali di un account di servizio) vengono utilizzate per autenticarsi e accedere ai dati in maniera sicura, senza esporre informazioni sensibili al frontend.
-- **Cache e ottimizzazione:** Per ridurre il numero di richieste e migliorare le performance, il progetto può utilizzare tecniche di caching (ad es. tramite `unstable_cache` in Next.js).
+### 📌 Aggiungere le credenziali a `.env.local`
+Apri il file JSON che hai scaricato e copia i valori seguenti nel tuo `.env.local`:
 
-## Requisiti
+```env
+GOOGLE_SHEET_ID=1654GQ2pWwr7Nt5MspQwRhD5_9TeNhkib9BgVAi-K4ds
+GOOGLE_SERVICE_ACCOUNT_EMAIL=menu-service@your-project.iam.gserviceaccount.com
+GOOGLE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANB...\n-----END PRIVATE KEY-----\n"
+```
 
-- Un account Google.
-- Accesso alla [Google Cloud Console](https://console.cloud.google.com/).
-- Un Google Sheet esistente con i dati da utilizzare.
-- Le credenziali (file JSON) generate per l'account di servizio.
+⚠️ **IMPORTANTE**:
+- Mantieni il file `.env.local` privato e **non caricarlo su GitHub**.
+- Se il valore `GOOGLE_PRIVATE_KEY` contiene `\n`, devi sostituire `\n` con `\\n` nel file `.env.local`.
 
-## Note
+## 5️⃣ Verifica che tutto funzioni
+Ora puoi testare la tua API!
 
-- **Sicurezza:** Conserva il file JSON delle credenziali in un luogo sicuro e non includerlo nel controllo versione (usa un file `.env.local` per gestire le variabili d'ambiente).
-- **Accesso:** Limita l'accesso al Google Sheet solo agli account e ai servizi necessari.
-- **Documentazione:** Consulta la [documentazione ufficiale di Google Sheets API](https://developers.google.com/sheets/api) per ulteriori dettagli e configurazioni avanzate.
+### 📌 Avvia il progetto Next.js:
+```sh
+npm run dev
+```
+
+E prova a visitare:
+```
+http://localhost:3000/menu
+```
+Se tutto è configurato correttamente, dovresti vedere il menu recuperato da Google Sheets! 🚀
 
