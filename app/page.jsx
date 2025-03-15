@@ -7,7 +7,7 @@ export const metadata = {
 
 export default function Home() {
   return (
-    <div className="flex items-center justify-center min-h-screen">
+    <div className="flex items-center justify-center min-h-screen text-3xl">
       <Link href={'/menu'}>Vai al menù</Link>
     </div>
   );
