@@ -3,7 +3,7 @@
 Questo progetto utilizza Google Sheets come database per un'applicazione Next.js.
 
 ## 🔗 Google Sheet
-Puoi accedere al foglio Google Sheets da questo link:
+Puoi accedere al foglio di esempio Google Sheets da questo link:
 [Menu Online](https://docs.google.com/spreadsheets/d/1654GQ2pWwr7Nt5MspQwRhD5_9TeNhkib9BgVAi-K4ds/edit?usp=sharing)
 
 ### 📌 Ottenere l'ID del Google Sheet
